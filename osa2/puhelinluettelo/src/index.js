@@ -1,17 +1,57 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+const Person = (person) => {
+  console.log('Person', person)
+  return (
+    <>
+      <p>{person.person.name}</p>
+    </>
+  )
+}
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+const App = () => {
+  const [ persons, setPersons] = useState([
+    { name: 'Arto Hellas' }
+  ]) 
+  const [ newName, setNewName ] = useState('')
+
+  const addName = (event) => {
+    event.preventDefault()
+    console.log('button clicked', event.target)
+    const personObject = {
+      name: newName
+    }
+
+    setPersons(persons.concat(personObject))
+    setNewName('')
+  }
+
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+  }
+
+  console.log(persons)
+  return (
+    <div>
+      <h2>Phonebook</h2>
+      <form onSubmit={addName}>
+        <div>
+          Name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          <button type="submit">Add</button>
+        </div>
+      </form>
+      <h2>Numbers</h2>
+        <div>
+          {persons.map(person => <Person key={person.name} person={person} />)}
+        </div>
+    </div>
+  )
+
+}
+
+
+ReactDOM.render(<App />, document.getElementById('root'))
